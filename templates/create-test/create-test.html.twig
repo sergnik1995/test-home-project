@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('createTest') }}
+{% endblock %}
+{% block body %}
+    <div id="create-test">
+        <test-template></test-template>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('createTest') }}
+{% endblock %}

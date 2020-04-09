@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\TestResult;
 use App\Entity\TestQuestion;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -23,6 +24,11 @@ class TestResultAnswer
     /**
      * @ORM\Column(type="string",name="answer")
      * @var string
+     * @Assert\Length(
+     *     min=1,
+     *     max=2000,
+     *     allowEmptyString=false
+     * )
      */
     private $answer;
 

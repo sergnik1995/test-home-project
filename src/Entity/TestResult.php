@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Test;
 use App\Entity\TestResultAnswer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -23,20 +24,23 @@ class TestResult
     private $id;
 
     /**
-     * @ORM\Column(type="integer",name="created_by")
-     * @var int
+     * @ORM\ManyToOne(targetEntity="User",inversedBy="results")
+     * @ORM\JoinColumn(name="created_by",referencedColumnName="id")
+     * @var User|null
      */
     private $createdBy;
 
     /**
-     * @ORM\Column(type="integer",name="created_at")
+     * @ORM\Column(type="integer",name="created_at",nullable=false)
      * @var int
+     * @Assert\NotBlank
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="integer",name="score")
      * @var int
+     * @Assert\NotBlank
      */
     private $score;
 
@@ -70,17 +74,17 @@ class TestResult
     }
 
     /**
-     * @return int
+     * @return User|null
      */
-    public function getCreatedBy(): int
+    public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
     /**
-     * @param int $createdBy
+     * @param User|null $createdBy
      */
-    public function setCreatedBy(int $createdBy): void
+    public function setCreatedBy(?User $createdBy): void
     {
         $this->createdBy = $createdBy;
     }

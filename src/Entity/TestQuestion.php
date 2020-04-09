@@ -7,12 +7,16 @@ use App\Entity\TestQuestionAnswer;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Test;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="test_question")
  */
 class TestQuestion
 {
+    const QUESTION_TYPES = ['few-from-list', 'number', 'one-from-list', 'text'];
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer",name="id")
@@ -24,14 +28,31 @@ class TestQuestion
     /**
      * @ORM\Column(type="string",name="question")
      * @var string
+     * @Assert\Length(
+     *     min=1,
+     *     max=1000,
+     *     allowEmptyString=false
+     * )
      */
     private $question;
 
     /**
      * @ORM\Column(type="string",name="question_type")
+     * @Assert\Choice(
+     *     choices=TestQuestion::QUESTION_TYPES,
+     *     message="Choose valid question type"
+     * )
      * @var string
      */
     private $questionType;
+
+    /**
+     * @ORM\Column(type="integer",name="points")
+     * @var int
+     * @Assert\LessThan(1000000)
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $points;
 
     /**
      * @ORM\ManyToOne(targetEntity="Test",inversedBy="questions")
@@ -41,7 +62,7 @@ class TestQuestion
     private $test;
 
     /**
-     * @ORM\OneToMany(targetEntity="TestQuestionAnswer",mappedBy="question")
+     * @ORM\OneToMany(targetEntity="TestQuestionAnswer",mappedBy="question",cascade={"persist"})
      * @var ArrayCollection
      */
     private $answers;
@@ -97,6 +118,22 @@ class TestQuestion
     public function setQuestionType(string $questionType): void
     {
         $this->questionType = $questionType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param int $points
+     */
+    public function setPoints(int $points): void
+    {
+        $this->points = $points;
     }
 
     /**
