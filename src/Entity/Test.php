@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\TestQuestion;
 use App\Entity\TestResult;
 use App\Entity\TestTag;
+use App\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -24,8 +26,9 @@ class Test
     private $id;
 
     /**
-     * @ORM\Column(type="integer",name="created_by")
-     * @var int
+     * @ORM\ManyToOne(targetEntity="User",inversedBy="tests")
+     * @ORM\JoinColumn(name="created_by",referencedColumnName="id")
+     * @var User|null
      */
     private $createdBy;
 
@@ -50,23 +53,39 @@ class Test
     /**
      * @ORM\Column(type="string", name="name")
      * @var string
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 255,
+     *     allowEmptyString = false
+     * )
      */
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="TestQuestion",mappedBy="test")
-     * @var ArrayCollection
+     * @ORM\Column(type="string", name="description")
+     * @var string
+     * @Assert\Length(
+     *     min=0,
+     *     max=500,
+     *     allowEmptyString = true
+     * )
+     */
+    private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="TestQuestion",mappedBy="test",cascade={"persist"})
+     * @var ArrayCollection|TestQuestion[]
      */
     private $questions;
 
     /**
      * @ORM\OneToMany(targetEntity="TestResult",mappedBy="test")
-     * @var ArrayCollection
+     * @var ArrayCollection|TestResult[]
      */
     private $results;
 
     /**
-     * @ORM\ManyToMany(targetEntity="TestTag",inversedBy="tests")
+     * @ORM\ManyToMany(targetEntity="TestTag",inversedBy="tests",cascade={"persist"})
      * @ORM\JoinTable(
      *     name="test_tag",
      *     joinColumns={
@@ -104,17 +123,17 @@ class Test
     }
 
     /**
-     * @return int
+     * @return User|null
      */
-    public function getCreatedBy(): int
+    public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
     /**
-     * @param int $createdBy
+     * @param User|null $createdBy
      */
-    public function setCreatedBy(int $createdBy): void
+    public function setCreatedBy(?User $createdBy): void
     {
         $this->createdBy = $createdBy;
     }
@@ -183,8 +202,25 @@ class Test
         $this->name = $name;
     }
 
+
     /**
-     * @return Collection
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return TestQuestion[]|Collection
      */
     public function getQuestions(): Collection
     {
@@ -192,7 +228,7 @@ class Test
     }
 
     /**
-     * @param ArrayCollection $questions
+     * @param TestQuestion[]|ArrayCollection $questions
      */
     public function setQuestions(ArrayCollection $questions): void
     {
@@ -200,7 +236,7 @@ class Test
     }
 
     /**
-     * @return Collection
+     * @return TestResult[]|Collection
      */
     public function getResults(): Collection
     {
@@ -208,7 +244,7 @@ class Test
     }
 
     /**
-     * @param ArrayCollection $results
+     * @param ArrayCollection|TestResult[] $results
      */
     public function setResults(ArrayCollection $results): void
     {
@@ -232,7 +268,7 @@ class Test
     }
 
     /**
-     * @param \App\Entity\TestTag $tag
+     * @param TestTag $tag
      */
     public function addTag(TestTag $tag)
     {
@@ -245,7 +281,7 @@ class Test
     }
 
     /**
-     * @param \App\Entity\TestTag $tag
+     * @param TestTag $tag
      */
     public function removeTag(TestTag $tag)
     {
