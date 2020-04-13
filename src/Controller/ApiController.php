@@ -35,7 +35,7 @@ class ApiController extends AbstractController
 
         if($tag !== "") {
             $suitableTags = $this->em->getRepository(TestTag::class)->createQueryBuilder('tt')
-                ->select('tt.name')
+                ->select('tt.id, tt.name')
                 ->where('tt.name LIKE :tag')
                 ->setParameter("tag", "%" . $tag . "%")
                 ->getQuery()->getResult();

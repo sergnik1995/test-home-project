@@ -1,6 +1,7 @@
 <template>
     <div class="input-tag-group">
         <div class="tag-block" v-for="(tag, index) in tags" v-bind:key="tag.position">
+            <input v-if="tag.tipId !== null" type="hidden" v-bind:name="'tags[' + index + '][id]'" v-bind:value="tag.tipId">
             <input class="p-2 m-1 border-0" v-model="tag.value" v-bind:name="'tags[' + index + '][name]'" pattern="\S+.*" required>
             <button type="button" class="btn btn-danger close" aria-label="Close"
                     v-on:click="removeTag(index)"><span aria-hidden="true">&times;</span>
@@ -15,7 +16,7 @@
         </div>
         <div v-show="tips.length > 0" class="test-tips" id="test-tips">
             <ul class="list-group">
-                <li class="list-group-item" v-for="tip in tips" v-on:click="chooseTip(tip.value)">{{ tip.value }}</li>
+                <li class="list-group-item" v-for="tip in tips" v-on:click="chooseTip(tip)">{{ tip.value }}</li>
             </ul>
         </div>
     </div>
@@ -27,6 +28,7 @@
                 tags: [],
                 nextTagId: 0,
                 value: '',
+                tipId: null,
                 tips: [],
             }
         },
@@ -46,13 +48,16 @@
                 if(foundIndex === undefined) {
                     this.tags.push({
                         value: value,
-                        position: this.nextTagId++
+                        position: this.nextTagId++,
+                        tipId: this.tipId
                     });
-                    this.value = '';
-                    this.tips = [];
                 } else {
                     alert('Такой тег уже есть');
                 }
+
+                this.value = '';
+                this.tipId = null;
+                this.tips = [];
             },
             removeTag (index) {
                 this.tags.splice(index, 1);
@@ -78,6 +83,7 @@
                         json.data.forEach(function (tip) {
                             tips.push({
                                 value: tip.name,
+                                id: tip.id
                             });
                         });
 
@@ -89,8 +95,9 @@
                     }
                 }
             },
-            chooseTip (value) {
-                this.value = value;
+            chooseTip (tip) {
+                this.value = tip.value;
+                this.tipId = tip.id;
                 this.addTag();
             }
         }

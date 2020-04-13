@@ -26,7 +26,7 @@ class TestTag
      * @ORM\Column(type="string",name="name")
      * @Assert\Length(
      *     min=1,
-     *     max=1,
+     *     max=40,
      *     allowEmptyString=false
      * )
      * @var string

@@ -33,7 +33,7 @@ class Test
     private $createdBy;
 
     /**
-     * @ORM\Column(type="integer", name="created_at")
+     * @ORM\Column(type="integer", name="created_at", nullable=true)
      * @var int
      */
     private $createdAt;
@@ -45,7 +45,7 @@ class Test
     private $time;
 
     /**
-     * @ORM\Column(type="integer", name="attempts")
+     * @ORM\Column(type="integer", name="attempts", nullable=true)
      * @var int
      */
     private $attempts;
@@ -139,17 +139,17 @@ class Test
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getCreatedAt(): int
+    public function getCreatedAt(): ?int
     {
         return $this->createdAt;
     }
 
     /**
-     * @param int $createdAt
+     * @param int|null $createdAt
      */
-    public function setCreatedAt(int $createdAt): void
+    public function setCreatedAt(?int $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -171,17 +171,17 @@ class Test
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getAttempts(): int
+    public function getAttempts(): ?int
     {
         return $this->attempts;
     }
 
     /**
-     * @param int $attempts
+     * @param int|null $attempts
      */
-    public function setAttempts(int $attempts): void
+    public function setAttempts(?int $attempts): void
     {
         $this->attempts = $attempts;
     }

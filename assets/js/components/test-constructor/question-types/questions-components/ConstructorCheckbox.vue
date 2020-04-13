@@ -2,7 +2,7 @@
     <div class="input-group">
         <div class="input-group-prepend">
             <div class="input-group-text">
-                <input type="checkbox" v-bind:name="'questions['+questionPosition+'][options]['+position+'][true]'">
+                <input type="checkbox" v-bind:name="'questions['+questionPosition+'][true][]'" v-bind:value="position">
             </div>
         </div>
         <input type="text" class="form-control" v-bind:name="'questions['+questionPosition+'][options]['+position+'][answer]'" v-bind:value="value" pattern="\S+.*" required>
