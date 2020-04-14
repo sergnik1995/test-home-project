@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('testsTop') }}
+{% endblock %}
+{% block body %}
+    <div id="test-top">
+        <test-top></test-top>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('testsTop') }}
+{% endblock %}

@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -68,12 +69,27 @@ class TestController extends AbstractController
     /**
      * @Route(path="/create-test", methods={"POST"})
      * @param Request $request
-     * @return Response
+     * @throws \Exception
      */
     public function createTest(Request $request)
     {
-        $this->createTestForm->createTest($request->request);
-        die();
+        $token = $request->request->get('token');
+
+        if($this->isCsrfTokenValid('create-test', $token)) {
+            $testId = $this->createTestForm->createTest($request->request);
+            return new RedirectResponse('/test/'.$testId);
+        } else {
+            return new Response('Неверный csrf токен', 400);
+        }
+    }
+
+    /**
+     * @Route(path="/top")
+     * @return Response
+     */
+    public function showTestsTop()
+    {
+        return $this->render('top/top.html.twig');
     }
 
 }

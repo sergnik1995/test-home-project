@@ -131,6 +131,8 @@ class CreateTestForm
 
         $this->em->persist($test);
         $this->em->flush();
+
+        return $test->getId();
     }
 
     private function validateFewFromListGroup($data): bool

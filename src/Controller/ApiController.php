@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Test;
 use App\Entity\TestTag;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,6 +51,42 @@ class ApiController extends AbstractController
                 'message' => 'wrong input'
             ];
         }
+
+        return new JsonResponse($data, 200);
+    }
+
+    /**
+     * @Route("/api/getTestsTop")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTestsTop(Request $request)
+    {
+        $tests = $this->em->getRepository(Test::class)->createQueryBuilder('t')
+            ->select('t')
+            ->orderBy('t.attempts', 'desc')
+            ->setMaxResults(10)
+            ->getQuery()->getResult();
+
+        $testsData = [];
+        foreach ($tests as $test) {
+            $testData = [];
+            $testData['id'] = $test->getId();
+            $testData['name'] = $test->getName();
+            $testData['description'] = $test->getDescription();
+
+            foreach ($test->getTags() as $tag) {
+                $tagData['name'] = $tag->getName();
+                $testData['tags'][] = $tagData;
+            }
+
+            $testsData[] = $testData;
+        }
+
+        $data = [
+            'status' => 'ok',
+            'data' => $testsData
+        ];
 
         return new JsonResponse($data, 200);
     }

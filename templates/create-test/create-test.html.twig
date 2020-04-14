@@ -5,7 +5,7 @@
 {% endblock %}
 {% block body %}
     <div id="create-test">
-        <test-template></test-template>
+        <test-template data-csrf="{{ csrf_token('create-test') }}"></test-template>
     </div>
 {% endblock %}
 {% block javascripts %}

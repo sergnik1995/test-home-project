@@ -3,5 +3,5 @@ import Vue from 'vue';
 
 const createTest = new Vue({
     el: '#create-test',
-    components: { TestTemplate }
+    components: { TestTemplate },
 });
