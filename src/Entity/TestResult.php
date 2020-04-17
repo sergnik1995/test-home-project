@@ -45,6 +45,12 @@ class TestResult
     private $score;
 
     /**
+     * @ORM\Column(type="integer",name="current_question")
+     * @var int|null
+     */
+    private $currentQuestion;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Test",inversedBy="results")
      * @ORM\JoinColumn(name="test_id", referencedColumnName="id")
      * @var Test
@@ -52,7 +58,7 @@ class TestResult
     private $test;
 
     /**
-     * @ORM\OneToMany(targetEntity="TestResultAnswer",mappedBy="result")
+     * @ORM\OneToMany(targetEntity="TestResultAnswer",mappedBy="result", cascade={"persist"})
      * @var ArrayCollection
      */
     private $answers;
@@ -119,6 +125,22 @@ class TestResult
     public function setScore(int $score): void
     {
         $this->score = $score;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCurrentQuestion(): ?int
+    {
+        return $this->currentQuestion;
+    }
+
+    /**
+     * @param int|null $currentQuestion
+     */
+    public function setCurrentQuestion(?int $currentQuestion): void
+    {
+        $this->currentQuestion = $currentQuestion;
     }
 
     /**

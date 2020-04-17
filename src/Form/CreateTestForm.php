@@ -38,12 +38,13 @@ class CreateTestForm
         $test->setTime($testData->get('time'));
 
         $questions = new ArrayCollection();
-        foreach ($testData->get('questions') as $questionData) {
+        foreach ($testData->get('questions') as $questionIndex => $questionData) {
             $question = new TestQuestion();
             $question->setQuestion(trim($questionData['question']));
             $question->setQuestionType($questionData['type']);
             $question->setPoints($questionData['points']);
             $question->setTest($test);
+            $question->setPosition($questionIndex);
 
             $answers = new ArrayCollection();
             foreach ($questionData['options'] as $index => $answerData) {
@@ -99,7 +100,7 @@ class CreateTestForm
         $test->setQuestions($questions);
 
         $tags = new ArrayCollection();
-        foreach ($testData->get('tags') as $tagData) {
+        foreach ($testData->get('tags', []) as $tagData) {
             if(isset($tagData['id'])) {
                 $tag = $this->em->getRepository(TestTag::class)->find($tagData['id']);
 

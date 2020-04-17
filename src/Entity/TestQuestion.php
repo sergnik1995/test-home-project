@@ -55,6 +55,14 @@ class TestQuestion
     private $points;
 
     /**
+     * @ORM\Column(type="integer",name="position")
+     * @var int
+     * @Assert\LessThan(500)
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $position;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Test",inversedBy="questions")
      * @ORM\JoinColumn(name="test_id", referencedColumnName="id")
      * @var Test
@@ -134,6 +142,22 @@ class TestQuestion
     public function setPoints(int $points): void
     {
         $this->points = $points;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
     }
 
     /**

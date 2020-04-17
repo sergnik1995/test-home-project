@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            Вопрос №{{ question.position }}
+        </div>
+        <div class="card-body">
+            <form action="/test/{{ test_id }}/question/answer" method="post">
+            <p class="card-text">{{ question.question }}</p>
+            <div class="mb-4">
+                <input type="hidden" name="token" value="{{ csrf_token('answer-question') }}">
+                {% if question.questionType == 'one-from-list' %}
+                    {% for answer in question.answers %}
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="answer" value="{{ loop.index0 }}">
+                            <label class="form-check-label">{{ answer.answer }}</label>
+                        </div>
+                    {% endfor %}
+                {% elseif question.questionType == 'few-from-list' %}
+                    {% for answer in question.answers %}
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="answers[]" value="{{ loop.index0 }}">
+                            <label class="form-check-label">{{ answer.answer }}</label>
+                        </div>
+                    {% endfor %}
+                {% elseif question.questionType == 'number' %}
+                    <input type="number" name="answer" required>
+                {% elseif question.questionType == 'text' %}
+                    <input type="text" name="answer" required>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Ответить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
